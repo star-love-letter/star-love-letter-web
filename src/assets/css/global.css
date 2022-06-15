@@ -1,0 +1,35 @@
+@font-face {
+    font-family: "font1";
+    /*定义字体名*/
+    /* src: url(../font/【嵐】皎月体.TTF); */
+    /* src: url(../font/方正趣宋简体.TTF); */
+    /* src: url(../font/方正胖头鱼简体.TTF); */
+    /* src: url(../font/海派腔调禅大黑简2.0.TTF); */
+    src: url(../font/汉仪趣黑W.TTF);
+}
+
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+/* 禁止选中文字 */
+* {
+    -moz-user-select: none;
+    -o-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* 鼠标消失 */
+    /* cursor: none; */
+    /* 鼠标样式改为图片 */
+    /* cursor: url('./assets/pointt.png'), pointer; */
+}
+
+/* 禁止拖动图片 */
+img {
+    pointer-events: none;
+}
