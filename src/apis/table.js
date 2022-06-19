@@ -1,34 +1,33 @@
 // 导入axios实例
 import httpRequest from '@/request/index'
 
-
 // 获取帖子分页列表
 export function apiGetPageList(PageListParam) {
-    return httpRequest({
+	return httpRequest({
 		url: '/api/table/pageList',
 		method: 'GET',
-        // data: PageListParam,
+		// data: PageListParam,
 		params: PageListParam
 	})
 }
-// 获取单个帖子内容
-export function apiGetTable(TableParam) {
-    return httpRequest({
+// 通过id获取帖子内容
+export function apiGetTable(id) {
+	return httpRequest({
 		url: '/api/table/table',
 		method: 'GET',
-        params: TableParam
+		params: { id: id }
 	})
 }
 // 获取帖子总数
 export function apiGetTableTotal() {
-    return httpRequest({
+	return httpRequest({
 		url: '/api/table/count',
 		method: 'GET',
 	})
 }
 // 获取搜索帖子列表
 export function apiGetSearchList(SearchListParam) {
-    return httpRequest({
+	return httpRequest({
 		url: '/api/table/searchList',
 		method: 'GET',
 		params: SearchListParam
@@ -36,8 +35,24 @@ export function apiGetSearchList(SearchListParam) {
 }
 // 发布帖子
 export function addTable(tableData) {
-    return httpRequest({
+	return httpRequest({
 		url: '/api/table/add?' + tableData,
 		method: 'POST',
+	})
+}
+// 点赞
+export function apiLike(id) {
+	return httpRequest({
+		url: '/api/table/support',
+		method: 'PUT',
+		params: { tableId: id }
+	})
+}
+// 取消点赞
+export function apiCancelLike(id) {
+	return httpRequest({
+		url: '/api/table/support',
+		method: 'DELETE',
+		params: { tableId: id }
 	})
 }

@@ -3,8 +3,9 @@ import BarView from '../views/Bar.vue'
 import TableList from '../views/TableList.vue'
 import HomeView from '../views/HomeView.vue'
 import ReleaseView from '../views/Release.vue'
-// import RegisterView from '../views/RegisterView.vue'
-// import UserView from '../views/UserView.vue'
+import Help from '../views/Help.vue'
+import TableDetails from '../views/TableDetails.vue'
+
 
 const routes = [
   {
@@ -23,9 +24,19 @@ const routes = [
         component: TableList
       },
       {
+        path: '/detail',
+        name: 'detail',
+        component: TableDetails
+      },
+      {
         path: '/release',
         name: 'release',
         component: ReleaseView
+      },
+      {
+        path: '/help',
+        name: 'help',
+        component: Help
       }
     ]
   }

@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 // 创建一个 axios 实例
 const service = axios.create({
     // baseURL: 'http://39.107.228.202:8089/', // 所有的请求地址前缀部分
@@ -17,6 +18,7 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
     function (config) {
+        // console.log(config)
         // 在发送请求之前做些什么
         return config
     },
@@ -30,7 +32,7 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
     function (response) {
-        // console.log(response)
+        // console.log(response.data)
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
         // dataAxios 是 axios 返回数据中的 data

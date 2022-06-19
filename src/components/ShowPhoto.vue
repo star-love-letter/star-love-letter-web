@@ -158,10 +158,7 @@ export default {
     // 获取帖子数据
     function getTable(id) {
       return new Promise((resolve, reject) => {
-        const param1 = {
-          id: id,
-        };
-        apiGetTable(param1).then((res) => {
+        apiGetTable(id).then((res) => {
           resolve(res);
         });
       });

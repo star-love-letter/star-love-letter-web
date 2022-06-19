@@ -15,11 +15,25 @@ import "dayjs/locale/zh-cn";
 import { VueMasonryPlugin } from 'vue-masonry';
 // 使用方法
 // {{this.$dayjs(table.tableData.createTime).locale("zh-cn").format('YYYY-MM-DD HH:mm:ss')}}
+import { ElNotification } from "element-plus";
+
+// 警告弹窗
+function warningPopup(data){
+    ElNotification({
+        type: "warning",
+        title: 'Warning',
+        message: data.message,
+    })
+}
 
 
 
 const app = createApp(App)
+// 全局注册
 app.config.globalProperties.$dayjs = dayjs
+app.config.globalProperties.$imgUrl = "http://localhost:8089/api/file/image/"
+window.$warningPopup = warningPopup
+
 
 
 app.use(store).use(router).use(ElementPlus).use(VueMasonryPlugin).mount('#app')

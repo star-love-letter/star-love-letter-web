@@ -121,11 +121,11 @@
     </div>
     </transition>
     <router-view></router-view>
-    <loginDialog :isShow = 'login.showLoginView' @getLoginInfo = 'loginInfo'></loginDialog>
+    <loginDialog :isShow = 'login.showLoginView'></loginDialog>
 </template>
 <script>
 // 引入ref
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import loginDialog from "../components/loginDialog.vue";
 import { apiUserInfo, apiLogout } from "@/apis/user.js";
 import { useStore } from "vuex";
@@ -165,15 +165,29 @@ export default {
           login.isLogin = false;
           login.loginInfo = {};
           store.commit("changeLogin", false);
+          localStorage.setItem("loginInfo", "");
         }
       });
     }
+    // 监控store中的userInfo
+    watch(
+      () => store.state.userInfo,
+      (newVal) => {
+        if (newVal) {
+          loginInfo(newVal);
+        }
+      }
+    );
     onMounted(() => {
-      // 判断是否登录
+      // 获取用户信息---判断是否登录
       apiUserInfo().then((res) => {
         if (res.code === 200) {
           store.commit("changeLogin", true);
           loginInfo(res.data);
+        }else{
+          // 将localStorage的loginInfo设置为空
+          localStorage.setItem("loginInfo", "");
+          store.commit("changeLogin", false);
         }
       });
     });

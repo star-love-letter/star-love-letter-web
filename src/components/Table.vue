@@ -1,16 +1,9 @@
 <template>
   <div
-    class="
-      p-4
-      w-120
-      mb-5
-      mx-5
-      text-gray-600
-      <xl:w-90 <xl:mx-3
-      <lg:w-120 <lg:mx-5
-      <md:w-full
-      box-border
-      <md:mb-5 <md:mx-0 <md:p-2
+    :class="
+      isDetail
+        ? `${table.style} + w-5/7 mx-auto`
+        : `${table.style} + w-120 mx-5 mb-5 <xl:mx-3`
     "
     style="background-color: #ffebc0"
   >
@@ -41,7 +34,11 @@
       <div class="leading-3">
         <div v-if="table.tableData.anonymous" class="block my-2 text-sm">
           <span class="font-bold">
-            [匿名<span v-if="table.tableData.userPublic !== null" class="text-xs pl-2">本人发布</span>]
+            [匿名<span
+              v-if="table.tableData.userPublic !== null"
+              class="text-xs pl-2"
+              >本人发布</span
+            >]
           </span>
         </div>
         <span
@@ -49,9 +46,16 @@
           class="block my-2 text-sm"
           >[BUG]</span
         >
-        <span v-else class="block my-2">{{
-          table.tableData.userPublic.name
-        }}</span>
+        <div v-else>
+          <!-- 本人帖子 -->
+          <span class="block my-2 text-blue-400 font-bold" v-if="isMine">
+            {{ table.tableData.userPublic.name }}
+          </span>
+          <!-- 非本人帖子 -->
+          <span class="block my-2" v-else>
+            {{ table.tableData.userPublic.name }}
+          </span>
+        </div>
         <div class="block text-xs">
           {{
             this.$dayjs(table.tableData.createTime)
@@ -68,6 +72,11 @@
           v-for="(item, index) in table.imgSrc"
           :key="index"
           class="w-3/10 mr-1 h-28 <xl:h-25 <lg:h-32 <sm:h-22"
+          :class="
+            isDetail
+              ? `w-1/3 mr-1 h-40`
+              : `w-3/10 mr-1 h-28 <xl:h-25 <lg:h-32 <sm:h-22`
+          "
           :src="item"
           :preview-src-list="table.imgSrc"
           :initial-index="4"
@@ -113,12 +122,16 @@
         </el-image>
       </div>
     </main>
-    <footer class="flex justify-around m-4">
-      <div>
+    <footer class="flex justify-around mt-12">
+      <div v-show="table.isLike" @click="cancelLike" class="text-yellow-600">
         <i class="fa-solid fa-thumbs-up"></i>
         {{ table.tableData.supportCount }}
       </div>
-      <div>
+      <div v-show="!table.isLike" @click="like" class="hover:text-yellow-600">
+        <i class="fa-regular fa-thumbs-up"></i>
+        {{ table.tableData.supportCount }}
+      </div>
+      <div @click="gotoDetail" :class="isDetail?'text-yellow-600':'hover:text-yellow-600'">
         <i class="fa-solid fa-comment"></i>
         {{ table.tableData.commentCount }}
       </div>
@@ -129,21 +142,41 @@
 <script>
 // 静态头像
 import avatarAnonymous from "../assets/img/avatar-anonymous1.jpg";
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import { apiLike, apiCancelLike } from "../apis/table";
 export default {
   props: {
     tableData: Object,
+    isDetail: Boolean,
   },
-  setup(props) {
+  emits: ["isLike"],
+  setup(props, context) {
+    // 是否为本人发布的帖子
+    let isMine = ref(false);
     const table = reactive({
       tableData: props.tableData,
+      isLike: props.tableData.support,
+      style:
+        "p-4 text-gray-600 <xl:w-90  <lg:w-120 <lg:mx-5 <md:w-full box-border<md:mb-5 <md:mx-0 <md:p-2",
       imgSrc: [],
       // imgUrl: "http://39.107.228.202:8089/api/file/image/",
       imgUrl: "http://localhost:8089/api/file/image/",
       // 是否有图片
       hasImg: false,
     });
-    // console.log(table.tableData);
+    onMounted(() => {
+      if (localStorage.getItem("loginInfo") !== "") {
+        // 获取localStorage中的loginInfo
+        const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+        // 如果有table.tableData.userPublic不等于null
+        if (table.tableData.userPublic !== null) {
+          if (loginInfo.id === table.tableData.userPublic.id)
+            isMine.value = true;
+          else isMine.value = false;
+        }
+      }
+    });
     // 解析图片
     function parseImage() {
       if (table.tableData.images) {
@@ -155,9 +188,47 @@ export default {
       }
     }
     parseImage();
+    const router = useRouter();
+    // 跳转到帖子详情页
+    function gotoDetail() {
+      router.push({
+        path: "/detail",
+        query: {
+          id: table.tableData.id,
+        },
+      });
+    }
+    // 点赞
+    function like() {
+      apiLike(table.tableData.id).then((res) => {
+        if (res.code === 200) {
+          context.emit("isLike", res);
+          table.isLike = true;
+          table.tableData.supportCount++;
+        } else {
+          $warningPopup(res);
+        }
+      });
+    }
+    // 取消点赞
+    function cancelLike() {
+      apiCancelLike(table.tableData.id).then((res) => {
+        if (res.code === 200) {
+          context.emit("isLike", res);
+          table.isLike = false;
+          table.tableData.supportCount--;
+        } else {
+          $warningPopup(res);
+        }
+      });
+    }
     return {
       table,
       avatarAnonymous,
+      isMine,
+      gotoDetail,
+      like,
+      cancelLike,
     };
   },
 };

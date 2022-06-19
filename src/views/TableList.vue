@@ -16,6 +16,8 @@
         v-for="item in tableList.tableList"
         :key="item.id"
         :tableData="item"
+        :isDetail = 'false'
+        @isLike = 'likeFunc'
         v-masonry-tile
       >
       </Table>
@@ -47,7 +49,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, watch } from "vue";
+import { onMounted, reactive, watch, ref } from "vue";
 import {
   apiGetPageList,
   apiGetTableTotal,
@@ -112,6 +114,10 @@ export default {
         tableList.isSearchList = false;
       }
     }
+    // 点赞
+    function likeFunc() {
+      getPageList()
+    }
     onMounted(() => {
       getTableTotal();
       getPageList();
@@ -120,6 +126,7 @@ export default {
       tableList,
       getPageList,
       getSearchList,
+      likeFunc
     };
   },
 };

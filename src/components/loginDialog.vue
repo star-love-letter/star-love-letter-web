@@ -19,8 +19,8 @@
           class="m-2"
         >
         <template #prepend>
-  <i class="fa-solid fa-lock"></i>
-</template>
+          <i class="fa-solid fa-lock"></i>
+        </template>
         </el-input>
         <router-link to="@/view/Login" class="float-right">忘记密码?</router-link>
       </div>
@@ -53,7 +53,7 @@ export default {
       userStr: "",
       password: "",
     });
-    // // 清空登录表单
+    // 清空登录表单
     function clearLoginFrom() {
       loginFrom.userStr = "";
       loginFrom.password = "";
@@ -64,32 +64,22 @@ export default {
         console.log(res);
         if (res.code === 200) {
           // 登录成功
-          context.emit("getLoginInfo", res.data);
           store.commit("changeLogin", true);
+          store.commit("getUserInfo", res.data);
+          // 将登录信息传递放在localStorage中
+          localStorage.setItem("loginInfo", JSON.stringify(res.data));
           // 清空登录表单
           showDialog.value = false;
           clearLoginFrom();
         }
       });
     }
-    // // 退出登录
-    // function logoutFn() {
-    //   apiLogout().then((res) => {
-    //     console.log(res);
-    //     // login.isLogin = false;
-    //     // login.loginInfo = {};
-    //     // localStorage.removeItem("loginInfo");
-    //   });
-    // }
     return {
       showDialog,
       loginFrom,
       clearLoginFrom,
       loginFn,
-    //   logoutFn,
     };
   },
 };
 </script>
-<style lang="">
-</style>
