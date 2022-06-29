@@ -25,6 +25,14 @@ export function apiGetTableTotal() {
 		method: 'GET',
 	})
 }
+// 获取搜索帖子的总数
+export function apiGetSearchTableTotal(keyword) {
+	return httpRequest({
+		url: '/api/table/searchCount',
+		method: 'GET',
+		params: {keyword: keyword}
+	})
+}
 // 获取搜索帖子列表
 export function apiGetSearchList(SearchListParam) {
 	return httpRequest({

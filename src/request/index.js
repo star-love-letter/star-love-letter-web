@@ -1,6 +1,8 @@
 import axios from 'axios'
+import { ElLoading } from 'element-plus'
 
 
+let loadingInstance; 
 // 创建一个 axios 实例
 const service = axios.create({
     // baseURL: 'http://39.107.228.202:8089/', // 所有的请求地址前缀部分
@@ -20,6 +22,7 @@ service.interceptors.request.use(
     function (config) {
         // console.log(config)
         // 在发送请求之前做些什么
+        loadingInstance = ElLoading.service()
         return config
     },
     function (error) {
@@ -35,6 +38,7 @@ service.interceptors.response.use(
         // console.log(response.data)
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
+        loadingInstance.close()
         // dataAxios 是 axios 返回数据中的 data
         const dataAxios = response.data
         // 这个状态码是和后端约定的

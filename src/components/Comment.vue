@@ -1,7 +1,7 @@
 <template>
   <div class="mx-3 my-8 flex">
     <el-avatar
-      class="mr-4 w-12 h-12"
+      class="mr-4 w-10 h-10"
       :src="this.$imgUrl + commentData.userPublic.avatar"
     />
     <div class="leading-3 w-full">
@@ -15,7 +15,9 @@
       <el-image
         v-for="(item, index) in comment.imgSrc"
         :key="index"
-        class="w-1/5 mr-1 mb-3 h-25"
+        :preview-src-list="comment.imgSrc"
+        :initial-index="index"
+        class="w-1/5 mr-1 mb-3 h-30"
         :src="item"
         fit="cover"
       >
@@ -24,7 +26,7 @@
             class="
               w-full
               mr-1
-              h-25
+              h-30
               bg-gray-200
               text-gray-400
               flex
@@ -66,6 +68,7 @@ import { ref,reactive,onMounted, getCurrentInstance } from "vue";
 export default {
   props: ["commentData"],
   setup(props) {
+    // 拿到当前实例 获取全局的imgUrl
     const { proxy } = getCurrentInstance(); //关键代码
     const $imgUrl = proxy.$imgUrl; //关键代码
 

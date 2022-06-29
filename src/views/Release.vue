@@ -89,7 +89,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, inject, watch } from "vue";
+import { reactive, ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import type {
   FormInstance,
@@ -102,12 +103,11 @@ import { ElNotification } from "element-plus";
 const { apiUserInfo }: any = require("@/apis/user");
 const { addTable }: any = require("@/apis/table");
 
+const router = useRouter();
 const formRef = ref<FormInstance>();
 const ruleFormRef = ref<FormInstance>();
 const uploadUrl = ref("http://localhost:8089/api/file/image/");
 // const uploadUrl = ref("http://39.107.228.202:8089/api/file/image/");
-// 是否显示登录弹窗
-let showLoginView = ref(false);
 // 判断是否登录
 let isLogin = ref(false);
 // 提交的数据
@@ -123,10 +123,6 @@ const ruleForm = reactive({
 });
 // 图片数组
 let imgs: any = ref([]);
-const loginFrom = reactive({
-  userStr: "",
-  password: "",
-});
 // 验证规则
 const rulesRelease = reactive<FormRules>({
   sender: [
@@ -153,10 +149,16 @@ const submitForm = (formEl: FormInstance | undefined) => {
       if (imgs.value.length !== 0) {
         ruleForm.images = JSON.stringify(imgs.value);
       }
-      // console.log(Qs.stringify(ruleForm));
       // 发布帖子
       addTable(Qs.stringify(ruleForm)).then((res: any) => {
         console.log(res);
+        if ((res.code = 200)) {
+          ElNotification.success({
+            title: "发布成功",
+            message: "恭喜你，发布成功",
+          });
+          router.push("/table");
+        }
       });
     }
   });

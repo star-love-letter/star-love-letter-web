@@ -1,17 +1,15 @@
 <template>
-    <router-view></router-view>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
 export default {
-    name: 'App',
-    setup() {
-        return {
-            message: 'Hello Vue!'
-        }
-    }
-}
+  name: "App",
+  setup() {
+    return {
+      message: "Hello Vue!",
+    };
+  },
+};
 </script>
-<style lang='scss' scoped>
-</style>
 

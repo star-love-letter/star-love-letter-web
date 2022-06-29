@@ -71,49 +71,35 @@
         <el-image
           v-for="(item, index) in table.imgSrc"
           :key="index"
-          class="w-3/10 mr-1 h-28 <xl:h-25 <lg:h-32 <sm:h-22"
           :class="
             isDetail
-              ? `w-1/3 mr-1 h-40`
+              ? `w-1/3 mr-1 h-50`
               : `w-3/10 mr-1 h-28 <xl:h-25 <lg:h-32 <sm:h-22`
           "
           :src="item"
-          :preview-src-list="table.imgSrc"
-          :initial-index="4"
+          :preview-src-list="isDetail ? table.imgSrc : []"
+          :initial-index="index"
           fit="cover"
         >
           <template #placeholder>
             <div
-              class="
-                w-full
-                mr-1
-                h-32
-                <xl:h-25
-                <lg:h-32
-                <sm:h-22
-                bg-gray-200
-                text-gray-400
-                flex
-                items-center
-                justify-center
+              class="bg-gray-200 text-gray-400 flex items-center justify-center "
+              :class="
+                isDetail
+                  ? `w-full mr-1 h-50`
+                  : `w-full mr-1 h-28 text-xs <xl:h-25 <lg:h-32 <sm:h-22`
               "
             >
-              Loading..
+              Loading...
             </div>
           </template>
           <template #error>
             <div
-              class="
-                w-full
-                mr-1
-                h-32
-                <xl:h-25
-                <lg:h-32
-                <sm:h-22
-                text-2xl
-                flex
-                items-center
-                justify-center
+              class="bg-gray-200 text-gray-400 flex items-center justify-center"
+              :class="
+                isDetail
+                  ? `w-full mr-1 h-50`
+                  : `w-full mr-1 h-28 <xl:h-25 <lg:h-32 <sm:h-22`
               "
             >
               <i class="fa-solid fa-image"></i>
@@ -131,7 +117,10 @@
         <i class="fa-regular fa-thumbs-up"></i>
         {{ table.tableData.supportCount }}
       </div>
-      <div @click="gotoDetail" :class="isDetail?'text-yellow-600':'hover:text-yellow-600'">
+      <div
+        @click="gotoDetail"
+        :class="isDetail ? 'text-yellow-600' : 'hover:text-yellow-600'"
+      >
         <i class="fa-solid fa-comment"></i>
         {{ table.tableData.commentCount }}
       </div>
@@ -142,9 +131,10 @@
 <script>
 // 静态头像
 import avatarAnonymous from "../assets/img/avatar-anonymous1.jpg";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { apiLike, apiCancelLike } from "../apis/table";
+import { useStore } from "vuex";
 export default {
   props: {
     tableData: Object,
@@ -152,6 +142,8 @@ export default {
   },
   emits: ["isLike"],
   setup(props, context) {
+    // 创建store实例
+    const store = useStore();
     // 是否为本人发布的帖子
     let isMine = ref(false);
     const table = reactive({
@@ -177,6 +169,19 @@ export default {
         }
       }
     });
+    // 监控store中的userInfo
+    watch(
+      () => store.state.userInfo,
+      (newVal) => {
+        // 获取localStorage中的loginInfo
+        const loginInfo = store.state.userInfo;
+        if (table.tableData.userPublic !== null) {
+          if (loginInfo.id === table.tableData.userPublic.id)
+            isMine.value = true;
+          else isMine.value = false;
+        }
+      }
+    );
     // 解析图片
     function parseImage() {
       if (table.tableData.images) {

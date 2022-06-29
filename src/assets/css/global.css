@@ -30,6 +30,6 @@ body,
 }
 
 /* 禁止拖动图片 */
-img {
+/* img {
     pointer-events: none;
-}
+} */

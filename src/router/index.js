@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue'
 import ReleaseView from '../views/Release.vue'
 import Help from '../views/Help.vue'
 import TableDetails from '../views/TableDetails.vue'
+import Register from '../views/Register.vue'
 
 
 const routes = [
@@ -22,6 +23,11 @@ const routes = [
         path: '/table',
         name: 'table',
         component: TableList
+      },
+      {
+        path: '/Register',
+        name: 'Register',
+        component: Register
       },
       {
         path: '/detail',
