@@ -23,3 +23,29 @@ export function apiUserInfo() {
         method: 'GET',
     })
 }
+// 获取邮箱验证码
+export function apiGetEmailCode(emailCodeParam) {
+    return httpRequest({
+        url: '/api/user/emailCode',
+        method: 'GET',
+        params: emailCodeParam
+    })
+}
+// 获取旋转验证码
+export function apiGetRotateCode(email) {
+    return httpRequest({
+        url: '/api/user/rotateCode',
+        method: 'GET',
+        params: {
+            email
+        }
+    })
+}
+// 通过邮箱注册
+export function apiAddUser(apiAddUserParam) {
+    return httpRequest({
+        url: '/api/user/addByEmail',
+        method: 'POST',
+        params: apiAddUserParam
+    })
+}

@@ -37,7 +37,7 @@
     <template #footer>
       <span>
         <el-button type="primary" @click="loginFn()">登录</el-button>
-        <el-button @click="login.showLoginView = false">注册</el-button>
+        <el-button @click="goRegistetr()">注册</el-button>
       </span>
     </template>
   </el-dialog>
@@ -46,6 +46,7 @@
 import { reactive, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { apiLogin } from "@/apis/user";
+import { useRouter } from "vue-router";
 
 export default {
   props: {
@@ -55,6 +56,8 @@ export default {
   setup(props, context) {
     // 创建store实例
     const store = useStore();
+    // 创建router实例
+    const router = useRouter();
     let showDialog = ref(false);
     let errorLoginMsg = ref("");
     watch(props, (val) => {
@@ -92,11 +95,17 @@ export default {
         }
       });
     }
+    // 跳转登录页面
+    function goRegistetr(){
+      showDialog.value = false;
+      router.push("/register");
+    }
     return {
       showDialog,
       loginFrom,
       clearLoginFrom,
       loginFn,
+      goRegistetr,
       errorLoginMsg,
     };
   },
