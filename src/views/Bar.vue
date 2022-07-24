@@ -21,6 +21,32 @@
       src="../assets/img/logo.png"
       alt="logo"
     />
+    <div v-if="innerWidth >= 768" class="flex space-x-10 text-2xl">
+      <div class="inline-block">
+        <router-link to="/home" active-class="activeClass">
+          <i class="fa-solid fa-house text-xl"></i>
+          首页
+        </router-link>
+      </div>
+      <div class="inline-block">
+        <router-link to="/table" active-class="activeClass">
+          <i class="fa-solid fa-table-list text-xl"></i>
+          表白墙
+        </router-link>
+      </div>
+      <div class="inline-block">
+        <router-link to="/release" active-class="activeClass">
+          <i class="fa-solid fa-heart-circle-plus text-xl"></i>
+          我要表白
+        </router-link>
+      </div>
+      <div class="inline-block">
+        <router-link to="/help" active-class="activeClass">
+          <i class="fa-solid fa-question text-xl"></i>
+          帮助
+        </router-link>
+      </div>
+    </div>
     <div class="right flex items-center">
       <!-- 登录头像 -->
       <div class="avatar_box mr-10">
@@ -107,6 +133,7 @@
         </div>
       </div>
       <i
+        v-if="innerWidth < 768"
         @click="menuShow = !menuShow"
         :size="40"
         class="
@@ -178,6 +205,7 @@ export default {
   setup() {
     // 创建store实例
     const store = useStore();
+    let innerWidth = ref(window.innerWidth);
     // 响应式menuShow
     let menuShow = ref(false);
     const login = reactive({
@@ -249,6 +277,7 @@ export default {
       });
     });
     return {
+      innerWidth,
       menuShow,
       login,
       logoutFn,

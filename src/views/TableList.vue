@@ -1,57 +1,67 @@
 <template>
-  <div class="container px-30 pb-10 m-auto <md:px-10 <md:pb-5 <md:pt-10">
-    <el-input
-      v-model="tableList.SearchListParam.keyword"
-      placeholder="搜索"
-      clearable
-      size="large"
-      @change="getSearchList"
-    >
-      <template #prefix>
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </template>
-    </el-input>
+  <div
+    class="
+      grid grid-cols-24
+      container
+      px-33
+      pb-10
+      m-auto
+      <md:px-10 <md:pb-5 <md:pt-10
+    "
+  >
     <div
-      v-masonry
-      class="mt-5"
-      v-if="
-        tableList.searchTotal !== 0 ||
-        (tableList.SearchListParam.keyword === '' &&
-          tableList.searchTotal === 0)
+      class="
+        col-span-24
+        lg:col-start-1 lg:col-span-22
+        xl:col-start-2 xl:col-span-20
+        2xl:col-start-2 2xl:col-span-20
       "
     >
-      <Table
-        v-for="item in tableList.tableList"
-        :key="item.id"
-        :tableData="item"
-        :isDetail="false"
-        @isLike="likeFunc"
-        v-masonry-tile
+      <el-input
+        v-model="tableList.SearchListParam.keyword"
+        placeholder="搜索"
+        clearable
+        size="large"
+        @change="getSearchList"
       >
-      </Table>
-    </div>
-    <!-- 全部数据的分页 -->
-    <el-pagination
-      v-if="!tableList.isSearchList"
-      background
-      layout="prev, pager, next"
-      :total="tableList.tableTotal"
-      class="flex justify-center"
-      :page-size="tableList.pageListParam.pageSize"
-      v-model:current-page="tableList.pageListParam.pageIndex"
-    />
-    <!-- 搜索数据的分页 -->
-    <el-pagination
-      v-else-if="tableList.isSearchList && tableList.searchTotal"
-      background
-      layout="prev, pager, next"
-      :total="tableList.searchTotal"
-      class="flex justify-center"
-      :page-size="tableList.SearchListParam.pageSize"
-      v-model:current-page="tableList.SearchListParam.pageIndex"
-    />
-    <div v-show="tableList.isSearchList && tableList.searchTotal === 0">
-      <p class="text-center text-gray-400 text-xl mt-30">暂无数据</p>
+        <template #prefix>
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </template>
+      </el-input>
+      <div v-masonry class="mt-5">
+        <Table
+          v-for="item in tableList.tableList"
+          :key="item.id"
+          :tableData="item"
+          :isDetail="false"
+          @isLike="likeFunc"
+          v-masonry-tile
+        >
+        </Table>
+      </div>
+      <!-- 全部数据的分页 -->
+      <el-pagination
+        v-if="!tableList.isSearchList"
+        background
+        layout="prev, pager, next"
+        :total="tableList.tableTotal"
+        class="flex justify-center col-end-auto"
+        :page-size="tableList.pageListParam.pageSize"
+        v-model:current-page="tableList.pageListParam.pageIndex"
+      />
+      <!-- 搜索数据的分页 -->
+      <el-pagination
+        v-else-if="tableList.isSearchList && tableList.searchTotal"
+        background
+        layout="prev, pager, next"
+        :total="tableList.searchTotal"
+        class="flex justify-center col-end-auto"
+        :page-size="tableList.SearchListParam.pageSize"
+        v-model:current-page="tableList.SearchListParam.pageIndex"
+      />
+      <div v-show="tableList.isSearchList && tableList.searchTotal === 0">
+        <p class="text-center text-gray-400 text-xl mt-30">暂无数据</p>
+      </div>
     </div>
   </div>
 </template>
@@ -141,6 +151,7 @@ export default {
     }
     // 获取搜索内容
     function getSearchList() {
+      console.log("TEST");
       if (tableList.SearchListParam.keyword) {
         getSearchTableTotal(tableList.SearchListParam.keyword);
         apiGetSearchList(tableList.SearchListParam).then((res) => {
