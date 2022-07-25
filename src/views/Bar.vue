@@ -212,8 +212,7 @@ export default {
       showLoginView: false,
       // 是否登录
       isLogin: false,
-      // imgUrl: "http://39.107.228.202:8089/api/file/image/",
-      imgUrl: "http://localhost:8089/api/file/image/",
+      imgUrl: process.env.VUE_APP_BASEURL+"/api/file/image/",
       // 响应式登录表单
       loginFrom: {
         userStr: "",

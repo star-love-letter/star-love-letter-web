@@ -17,8 +17,9 @@ import { VueMasonryPlugin } from 'vue-masonry';
 // {{this.$dayjs(table.tableData.createTime).locale("zh-cn").format('YYYY-MM-DD HH:mm:ss')}}
 import { ElNotification } from "element-plus";
 
+
 // 警告弹窗
-function warningPopup(data){
+function warningPopup(data) {
     ElNotification({
         type: "warning",
         title: 'Warning',
@@ -26,14 +27,11 @@ function warningPopup(data){
     })
 }
 
-
-
 const app = createApp(App)
+
 // 全局注册
 app.config.globalProperties.$dayjs = dayjs
-app.config.globalProperties.$imgUrl = "http://localhost:8089/api/file/image/"
+app.config.globalProperties.$imgUrl = process.env.VUE_APP_BASEURL + "/api/file/image/"
 window.$warningPopup = warningPopup
-
-
 
 app.use(store).use(router).use(ElementPlus).use(VueMasonryPlugin).mount('#app')

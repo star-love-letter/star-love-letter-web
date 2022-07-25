@@ -106,8 +106,8 @@ const { addTable }: any = require("@/apis/table");
 const router = useRouter();
 const formRef = ref<FormInstance>();
 const ruleFormRef = ref<FormInstance>();
-const uploadUrl = ref("http://localhost:8089/api/file/image/");
-// const uploadUrl = ref("http://39.107.228.202:8089/api/file/image/");
+const uploadUrl = ref(process.env.VUE_APP_BASEURL+"/api/file/image/");
+
 // 判断是否登录
 let isLogin = ref(false);
 // 提交的数据

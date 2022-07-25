@@ -144,6 +144,7 @@ export default {
   setup(props, context) {
     // 创建store实例
     const store = useStore();
+    
     // 是否为本人发布的帖子
     let isMine = ref(false);
     const table = reactive({
@@ -152,8 +153,7 @@ export default {
       style:
         "p-4 text-gray-600 <xl:w-90  <lg:w-120 <lg:mx-5 <md:w-full box-border<md:mb-5 <md:mx-0 <md:p-2",
       imgSrc: [],
-      // imgUrl: "http://39.107.228.202:8089/api/file/image/",
-      imgUrl: "http://localhost:8089/api/file/image/",
+      imgUrl: process.env.VUE_APP_BASEURL +"/api/file/image/",
       // 是否有图片
       hasImg: false,
     });

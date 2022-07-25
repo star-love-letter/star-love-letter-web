@@ -1,13 +1,10 @@
 import axios from 'axios'
 import { ElLoading } from 'element-plus'
 
-
 let loadingInstance;
 // 创建一个 axios 实例
 const service = axios.create({
-    // baseURL: 'http://39.107.228.202:8089/', // 所有的请求地址前缀部分
-    baseURL: 'http://localhost:8089/', // 所有的请求地址前缀部分
-    // baseURL: './', // 所有的请求地址前缀部分
+    baseURL: process.env.VUE_APP_BASEURL, // 所有的请求地址前缀部分
     timeout: 60000, // 请求超时时间毫秒
     withCredentials: true, // 异步请求携带cookie
     crossdomain: true,
