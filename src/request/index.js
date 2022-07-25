@@ -2,11 +2,12 @@ import axios from 'axios'
 import { ElLoading } from 'element-plus'
 
 
-let loadingInstance; 
+let loadingInstance;
 // 创建一个 axios 实例
 const service = axios.create({
     // baseURL: 'http://39.107.228.202:8089/', // 所有的请求地址前缀部分
     baseURL: 'http://localhost:8089/', // 所有的请求地址前缀部分
+    // baseURL: './', // 所有的请求地址前缀部分
     timeout: 60000, // 请求超时时间毫秒
     withCredentials: true, // 异步请求携带cookie
     crossdomain: true,
@@ -19,13 +20,13 @@ const service = axios.create({
 
 // 添加请求拦截器
 service.interceptors.request.use(
-    function (config) {
+    function(config) {
         // console.log(config)
         // 在发送请求之前做些什么
         loadingInstance = ElLoading.service()
         return config
     },
-    function (error) {
+    function(error) {
         // 对请求错误做些什么
         console.log(error)
         return Promise.reject(error)
@@ -34,18 +35,18 @@ service.interceptors.request.use(
 
 // 添加响应拦截器
 service.interceptors.response.use(
-    function (response) {
+    function(response) {
         // console.log(response.data)
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
         loadingInstance.close()
-        // dataAxios 是 axios 返回数据中的 data
+            // dataAxios 是 axios 返回数据中的 data
         const dataAxios = response.data
-        // 这个状态码是和后端约定的
+            // 这个状态码是和后端约定的
         const code = dataAxios.reset
         return dataAxios
     },
-    function (error) {
+    function(error) {
         // 超出 2xx 范围的状态码都会触发该函数。
         // 对响应错误做点什么
         console.log(error)
@@ -54,4 +55,3 @@ service.interceptors.response.use(
 )
 
 export default service
-
