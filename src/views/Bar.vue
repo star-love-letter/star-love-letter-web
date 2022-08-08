@@ -22,25 +22,25 @@
       alt="logo"
     />
     <div v-if="innerWidth >= 768" class="flex space-x-10 text-2xl">
-      <div class="inline-block">
+      <div class="inline-block font-bold">
         <router-link to="/home" active-class="activeClass">
           <i class="fa-solid fa-house text-xl"></i>
           首页
         </router-link>
       </div>
-      <div class="inline-block">
+      <div class="inline-block font-bold">
         <router-link to="/table" active-class="activeClass">
           <i class="fa-solid fa-table-list text-xl"></i>
           表白墙
         </router-link>
       </div>
-      <div class="inline-block">
+      <div class="inline-block font-bold">
         <router-link to="/release" active-class="activeClass">
           <i class="fa-solid fa-heart-circle-plus text-xl"></i>
           我要表白
         </router-link>
       </div>
-      <div class="inline-block">
+      <div class="inline-block font-bold">
         <router-link to="/help" active-class="activeClass">
           <i class="fa-solid fa-question text-xl"></i>
           帮助
@@ -212,7 +212,7 @@ export default {
       showLoginView: false,
       // 是否登录
       isLogin: false,
-      imgUrl: process.env.VUE_APP_BASEURL+"/api/file/image/",
+      imgUrl: process.env.VUE_APP_BASEURL + "/api/file/image/",
       // 响应式登录表单
       loginFrom: {
         userStr: "",

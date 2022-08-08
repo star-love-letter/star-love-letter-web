@@ -3,7 +3,7 @@
     v-model="showDialog"
     title="登录"
     center
-    width="40%"
+    :width="isMD ? '100%' : '40%'"
     @close="clearLoginFrom"
   >
     <div class="w-4/5 m-auto">
@@ -96,11 +96,17 @@ export default {
       });
     }
     // 跳转登录页面
-    function goRegistetr(){
+    function goRegistetr() {
       showDialog.value = false;
       router.push("/register");
     }
+    let isMD = ref(false);
+    function monitorWidth() {
+      window.screen.width < 768 ? (isMD = true) : (isMD = false);
+    }
+    monitorWidth();
     return {
+      isMD,
       showDialog,
       loginFrom,
       clearLoginFrom,

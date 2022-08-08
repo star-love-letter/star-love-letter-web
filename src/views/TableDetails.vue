@@ -8,7 +8,7 @@
     >
     </Table>
     <div
-      class="px-4 pb-8 w-5/7 mx-auto h-auto text-gray-600"
+      class="px-4 pb-8 w-5/7 mx-auto h-auto text-gray-600 <md:w-full"
       style="background-color: #ffebc0"
       @click.capture="comment.emojiVisible = false"
     >

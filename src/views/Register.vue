@@ -1,5 +1,5 @@
 <template>
-  <div class="container px-30 pb-10 m-auto <md:px-10 <md:pb-5 <md:pt-10">
+  <div class="container px-30 pb-10 m-auto <md:px-0 <md:pb-5 <md:pt-10">
     <span class="text-center block text-2xl">注册</span>
     <el-form
       ref="ruleFormRef"
@@ -14,8 +14,8 @@
         pb-10
         container
         m-auto
-        <md:px-10 <md:pb-5 <md:pt-10
-        <lg:px-10
+        <md:px-0 <md:pb-5 <md:pt-10 <md:w-full
+        <lg:px-10 <lg:w-full
         w-180
       "
     >
