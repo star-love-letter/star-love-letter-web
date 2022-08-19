@@ -1,6 +1,6 @@
 <template>
   <div class="container px-30 pb-10 m-auto <md:px-10 <md:pb-5 <md:pt-10">
-    <div class="w-120">
+    <div class="w-120  lg:mx-40 lg:mx-50 xl:mx-64 2xl:mx-72">
         <h2 class="text-2xl font-bold mt-5 mb-3">帮助📭</h2>
         <div class="ml-5"></div>
         <label class="font-bold mt-5 mb-2 block">主要功能</label>

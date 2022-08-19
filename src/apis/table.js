@@ -30,7 +30,7 @@ export function apiGetSearchTableTotal(keyword) {
 	return httpRequest({
 		url: '/api/table/searchCount',
 		method: 'GET',
-		params: {keyword: keyword}
+		params: { keyword: keyword }
 	})
 }
 // 获取搜索帖子列表
@@ -62,5 +62,13 @@ export function apiCancelLike(id) {
 		url: '/api/table/support',
 		method: 'DELETE',
 		params: { tableId: id }
+	})
+}
+// 举报帖子
+export function apiReport(tableId, type, content) {
+	return httpRequest({
+		url: '/api/reportTable/report',
+		method: 'Post',
+		params: { tableId: tableId, type: type, content: content }
 	})
 }
