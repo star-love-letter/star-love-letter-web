@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ElLoading } from 'element-plus'
+import router from "@/router";
 
 let loadingInstance;
 // 创建一个 axios 实例
@@ -33,7 +34,17 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
     function(response) {
-        // console.log(response.data)
+
+        // 判断网站是否关闭
+        if (response.data.code === 60003){
+            router.push({
+                name: 'close',
+                params: {
+                    message: response.data.message
+                }
+            })
+        }
+
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
         loadingInstance.close()

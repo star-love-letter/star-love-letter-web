@@ -8,7 +8,13 @@
       v-if="table.isFirstImg"
       :src="table.imgSrc"
       fit="cover"
-      class="w-100 h-100 <xl:w-80 <xl:h-80 <md:w-full <md:h-100 <sm:w-full <sm:h-full"
+      class="
+        w-100
+        h-100
+        <xl:w-80 <xl:h-80
+        <md:w-full <md:h-100
+        <sm:w-full <sm:h-full
+      "
       lazy
     >
       <template #placeholder>
@@ -129,8 +135,8 @@
             发表于：
             {{
               this.$dayjs(table.tableData.createTime)
-                .locale("zh-cn")
-                .format("YYYY-MM-DD HH:mm:ss")
+                .locale('zh-cn')
+                .format('YYYY-MM-DD HH:mm:ss')
             }}
           </p>
         </div>
@@ -139,45 +145,49 @@
   </div>
 </template>
 <script>
-import { reactive } from "vue";
-import { apiGetTable } from "../apis/table.js";
-export default {
-  props: {
-    tableId: Number,
-    isFirstImg: Boolean,
-  },
-  setup(props) {
-    const table = reactive({
-      tableData: {},
-      detail: false,
-      isFirstImg: false,
-      imgSrc: "",
-      imgUrl: "http://39.107.228.202:8089/api/file/image/",
-    });
-    table.isFirstImg = props.isFirstImg;
-    // 获取帖子数据
-    function getTable(id) {
-      return new Promise((resolve, reject) => {
-        apiGetTable(id).then((res) => {
-          resolve(res);
-        });
+  import { reactive, onMounted } from 'vue';
+  export default {
+    props: {
+      isFirstImg: Boolean,
+      tableData: Object,
+    },
+    setup(props) {
+      const table = reactive({
+        tableData: {},
+        detail: false,
+        isFirstImg: false,
+        imgSrc: '',
+        imgUrl: process.env.VUE_APP_BASEURL + '/api/file/image/',
       });
-    }
-    async function getTableData() {
-      const res = await getTable(props.tableId);
-      table.tableData = res.data;
+      onMounted(() => {
+        table.isFirstImg = props.isFirstImg;
+        let dataList = props.tableData;
+        if (table.isFirstImg === true) {
+          setTimeout(() => {
+            table.tableData = dataList[0];
+            parseImage();
+          }, 300);
+        } else {
+          setTimeout(() => {
+            table.tableData = dataList[1];
+            parseImage();
+          }, 300);
+        }
+      });
       // 解析图片
-      if (table.tableData.images) {
+      function parseImage() {
+        let imgSrc = [];
         let str = JSON.parse(table.tableData.images);
-        table.imgSrc = table.imgUrl + String(str);
+        for (const item of str) {
+          imgSrc.push(table.imgUrl + item);
+        }
+        table.imgSrc = imgSrc[0];
       }
-    }
-    getTableData();
-    return {
-      table,
-    };
-  },
-};
+
+      return {
+        table,
+        parseImage,
+      };
+    },
+  };
 </script>
-<style lang="">
-</style>

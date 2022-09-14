@@ -6,6 +6,9 @@ module.exports = defineConfig({
     windicss: {
     },
   },
+  devServer: { // 自定义服务配置  
+    port: 2233 // 端口号
+  },
   configureWebpack: {
     resolve: { extensions: [".ts", ".tsx", ".js", ".json"] },
     module: {

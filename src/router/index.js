@@ -6,6 +6,7 @@ import ReleaseView from '../views/Release.vue'
 import Help from '../views/Help.vue'
 import TableDetails from '../views/TableDetails.vue'
 import Register from '../views/Register.vue'
+import closedWebsite from '../views/closedWebsite.vue'
 
 
 const routes = [{
@@ -13,36 +14,41 @@ const routes = [{
     component: BarView,
     redirect: '/home',
     children: [{
-            path: '/home',
-            name: 'home',
-            component: HomeView
-        },
-        {
-            path: '/table',
-            name: 'table',
-            component: TableList
-        },
-        {
-            path: '/Register',
-            name: 'Register',
-            component: Register
-        },
-        {
-            path: '/detail',
-            name: 'detail',
-            component: TableDetails
-        },
-        {
-            path: '/release',
-            name: 'release',
-            component: ReleaseView
-        },
-        {
-            path: '/help',
-            name: 'help',
-            component: Help
-        }
+        path: '/home',
+        name: 'home',
+        component: HomeView
+    },
+    {
+        path: '/table',
+        name: 'table',
+        component: TableList
+    },
+    {
+        path: '/Register',
+        name: 'Register',
+        component: Register
+    },
+    {
+        path: '/detail',
+        name: 'detail',
+        component: TableDetails
+    },
+    {
+        path: '/release',
+        name: 'release',
+        component: ReleaseView
+    },
+    {
+        path: '/help',
+        name: 'help',
+        component: Help
+    },
     ]
+},
+{
+    path: '/close',
+    name: 'close',
+    component: closedWebsite
 }]
 
 const router = createRouter({
