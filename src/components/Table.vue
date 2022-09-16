@@ -26,7 +26,9 @@
           v-if="table.tableData.state === 1"
           >已封禁</span
         >
-        <span class="text-xs mx-5 text-blue-500" v-else-if="isMine">我的帖子</span>
+        <span class="text-xs mx-5 text-blue-500" v-else-if="isMine"
+          >我的帖子</span
+        >
         <span @click="onReport" class="text-xs mx-5" v-else> 举报 </span>
       </div>
     </header>
@@ -56,8 +58,8 @@
         <div class="block text-xs">
           {{
             this.$dayjs(table.tableData.createTime)
-              .locale("zh-cn")
-              .format("YYYY-MM-DD HH:mm:ss")
+              .locale('zh-cn')
+              .format('YYYY-MM-DD HH:mm:ss')
           }}
         </div>
       </div>
@@ -132,7 +134,7 @@
       width="40%"
       :fullscreen="innerWidth < 768"
     >
-      <el-form :model="formReport">
+      <el-form :model="formReport" label-width="100px">
         <el-form-item label="帖子id">
           <el-input disabled v-model="formReport.tableId"></el-input>
         </el-form-item>
@@ -158,158 +160,160 @@
         </el-form-item>
       </el-form>
 
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialogReport">取 消</el-button>
-        <el-button type="primary" @click="saveDialogReport">提 交</el-button>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="saveDialogReport">提 交</el-button>
+          <el-button @click="closeDialogReport">取 消</el-button>
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
 <script>
-// 静态头像
-import avatarAnonymous from "../assets/img/avatar-anonymous1.jpg";
-import { onMounted, reactive, ref, watch } from "vue";
-import { useRouter } from "vue-router";
-import { apiLike, apiCancelLike, apiReport } from "../apis/table";
-import { useStore } from "vuex";
-import { ElNotification } from "element-plus";
-export default {
-  props: {
-    tableData: Object,
-    isDetail: Boolean,
-  },
-  emits: ["isLike"],
-  setup(props, context) {
-    // 创建store实例
-    const store = useStore();
+  // 静态头像
+  import avatarAnonymous from '../assets/img/avatar-anonymous1.jpg';
+  import { onMounted, reactive, ref, watch } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { apiLike, apiCancelLike, apiReport } from '../apis/table';
+  import { useStore } from 'vuex';
+  import { ElNotification } from 'element-plus';
+  export default {
+    props: {
+      tableData: Object,
+      isDetail: Boolean,
+    },
+    emits: ['isLike'],
+    setup(props, context) {
+      // 创建store实例
+      const store = useStore();
 
-    let innerWidth = ref(window.innerWidth);
-    const formReport = reactive({
-      tableId: props.tableData.id,
-      type: 0,
-      content: "",
-    });
-    // 是否为本人发布的帖子
-    let isMine = ref(false);
-    let dialogReportShow = ref(false);
-    const table = reactive({
-      tableData: props.tableData,
-      isLike: props.tableData.support,
-      style:
-        "p-4 text-gray-600 <xl:w-90  <lg:w-120 <lg:mx-5 <md:w-full box-border<md:mb-5 <md:mx-0 <md:p-2",
-      imgSrc: [],
-      imgUrl: process.env.VUE_APP_BASEURL + "/api/file/image/",
-      // 是否有图片
-      hasImg: false,
-    });
-    onMounted(() => {
-      if (localStorage.getItem("loginInfo") !== "") {
-        // 获取localStorage中的loginInfo
-        const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
-        // 如果有table.tableData.userPublic不等于null
-        if (table.tableData.userPublic !== null) {
-          if (loginInfo.id === table.tableData.userPublic.id)
-            isMine.value = true;
-          else isMine.value = false;
-        }
-      }
-    });
-    // 监控store中的userInfo
-    watch(
-      () => store.state.userInfo,
-      (newVal) => {
-        // 获取localStorage中的loginInfo
-        const loginInfo = store.state.userInfo;
-        if (table.tableData.userPublic !== null) {
-          if (loginInfo.id === table.tableData.userPublic.id)
-            isMine.value = true;
-          else isMine.value = false;
-        }
-      }
-    );
-    // 解析图片
-    function parseImage() {
-      if (table.tableData.images) {
-        table.hasImg = true;
-        let str = JSON.parse(table.tableData.images);
-        for (const item of str) {
-          table.imgSrc.push(table.imgUrl + item);
-        }
-      }
-    }
-    parseImage();
-    const router = useRouter();
-    // 跳转到帖子详情页
-    function gotoDetail() {
-      router.push({
-        path: "/detail",
-        query: {
-          id: table.tableData.id,
-        },
+      let innerWidth = ref(window.innerWidth);
+      const formReport = reactive({
+        tableId: props.tableData.id,
+        type: 0,
+        content: '',
       });
-    }
-    //举报帖子
-    function onReport() {
-      console.log(formReport);
-      dialogReportShow.value = true;
-    }
-
-    function closeDialogReport() {
-      dialogReportShow.value = false;
-    }
-
-    function saveDialogReport() {
-      apiReport(formReport.tableId, formReport.type, formReport.content).then(
-        (res) => {
-          if (res.code === 200) {
-            ElNotification.success("举报成功");
-            closeDialogReport();
-          } else {
-            $warningPopup(res);
+      // 是否为本人发布的帖子
+      let isMine = ref(false);
+      let dialogReportShow = ref(false);
+      const table = reactive({
+        tableData: props.tableData,
+        isLike: props.tableData.support,
+        style:
+          'p-4 text-gray-600 <xl:w-90  <lg:w-120 <lg:mx-5 <md:w-full box-border<md:mb-5 <md:mx-0 <md:p-2',
+        imgSrc: [],
+        imgUrl: process.env.VUE_APP_BASEURL + '/api/file/image/',
+        // 是否有图片
+        hasImg: false,
+      });
+      onMounted(() => {
+        if (localStorage.getItem('loginInfo') !== '') {
+          // 获取localStorage中的loginInfo
+          const loginInfo = JSON.parse(localStorage.getItem('loginInfo'));
+          // 如果有table.tableData.userPublic不等于null
+          if (table.tableData.userPublic !== null) {
+            if (loginInfo.id === table.tableData.userPublic.id)
+              isMine.value = true;
+            else isMine.value = false;
+          }
+        }
+      });
+      // 监控store中的userInfo
+      watch(
+        () => store.state.userInfo,
+        newVal => {
+          // 获取localStorage中的loginInfo
+          const loginInfo = store.state.userInfo;
+          if (table.tableData.userPublic !== null) {
+            if (loginInfo.id === table.tableData.userPublic.id)
+              isMine.value = true;
+            else isMine.value = false;
           }
         }
       );
-    }
-    // 点赞
-    function like() {
-      apiLike(table.tableData.id).then((res) => {
-        if (res.code === 200) {
-          context.emit("isLike", res);
-          table.isLike = true;
-          table.tableData.supportCount++;
-        } else {
-          $warningPopup(res);
+      // 解析图片
+      function parseImage() {
+        if (table.tableData.images) {
+          table.hasImg = true;
+          let str = JSON.parse(table.tableData.images);
+          for (const item of str) {
+            table.imgSrc.push(table.imgUrl + item);
+          }
         }
-      });
-    }
-    // 取消点赞
-    function cancelLike() {
-      apiCancelLike(table.tableData.id).then((res) => {
-        if (res.code === 200) {
-          context.emit("isLike", res);
-          table.isLike = false;
-          table.tableData.supportCount--;
-        } else {
-          $warningPopup(res);
-        }
-      });
-    }
-    return {
-      innerWidth,
-      table,
-      avatarAnonymous,
-      isMine,
-      gotoDetail,
-      like,
-      cancelLike,
-      onReport,
-      dialogReportShow,
-      closeDialogReport,
-      saveDialogReport,
-      formReport,
-    };
-  },
-};
+      }
+      parseImage();
+      const router = useRouter();
+      // 跳转到帖子详情页
+      function gotoDetail() {
+        router.push({
+          path: '/detail',
+          query: {
+            id: table.tableData.id,
+          },
+        });
+      }
+      //举报帖子
+      function onReport() {
+        console.log(formReport);
+        dialogReportShow.value = true;
+      }
+
+      function closeDialogReport() {
+        dialogReportShow.value = false;
+      }
+
+      function saveDialogReport() {
+        apiReport(formReport.tableId, formReport.type, formReport.content).then(
+          res => {
+            if (res.code === 200) {
+              ElNotification.success('举报成功');
+              closeDialogReport();
+            } else {
+              $warningPopup(res);
+            }
+          }
+        );
+      }
+      // 点赞
+      function like() {
+        apiLike(table.tableData.id).then(res => {
+          if (res.code === 200) {
+            context.emit('isLike', res);
+            table.isLike = true;
+            table.tableData.supportCount++;
+          } else {
+            $warningPopup(res);
+          }
+        });
+      }
+      // 取消点赞
+      function cancelLike() {
+        apiCancelLike(table.tableData.id).then(res => {
+          if (res.code === 200) {
+            context.emit('isLike', res);
+            table.isLike = false;
+            table.tableData.supportCount--;
+          } else {
+            $warningPopup(res);
+          }
+        });
+      }
+      return {
+        innerWidth,
+        table,
+        avatarAnonymous,
+        isMine,
+        gotoDetail,
+        like,
+        cancelLike,
+        onReport,
+        dialogReportShow,
+        closeDialogReport,
+        saveDialogReport,
+        formReport,
+      };
+    },
+  };
 </script>
 <style lang="">
 </style>

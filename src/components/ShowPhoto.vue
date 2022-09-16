@@ -145,35 +145,56 @@
   </div>
 </template>
 <script>
-  import { reactive, onMounted } from 'vue';
+  import { reactive } from 'vue';
+  import { apiGetPageList } from '../apis/table.js';
   export default {
     props: {
       isFirstImg: Boolean,
-      tableData: Object,
     },
     setup(props) {
       const table = reactive({
         tableData: {},
         detail: false,
-        isFirstImg: false,
+        isFirstImg: props.isFirstImg,
         imgSrc: '',
         imgUrl: process.env.VUE_APP_BASEURL + '/api/file/image/',
       });
-      onMounted(() => {
-        table.isFirstImg = props.isFirstImg;
-        let dataList = props.tableData;
-        if (table.isFirstImg === true) {
-          setTimeout(() => {
-            table.tableData = dataList[0];
-            parseImage();
-          }, 300);
+      const PageListParam = {
+        pageIndex: 1,
+        pageSize: 10,
+        rankName: 'support_count',
+      };
+      // 获取页面数据
+      const getPageList = async () => {
+        let hotListData = [];
+        // 根据点赞数获取数据
+        await apiGetPageList(PageListParam).then(res => {
+          // 遍历数据 如果有图片就添加到数组
+          for (const item of res.data) {
+            if (item.images !== null && item.images !== undefined) {
+              hotListData.push(item);
+              if (hotListData.length === 2) {
+                return;
+              }
+            }
+          }
+          // 判断有图片的列表
+          // 如果有图片的数组列表小于2的话就将页数增加1并递归调用这个函数
+          if (hotListData.length < 2) {
+            PageListParam.pageIndex++;
+            getPageList();
+          }
+        });
+        if (props.isFirstImg) {
+          table.tableData = hotListData[0];
+          parseImage();
         } else {
-          setTimeout(() => {
-            table.tableData = dataList[1];
-            parseImage();
-          }, 300);
+          table.tableData = hotListData[1];
+          parseImage();
         }
-      });
+        console.log('table.tableData', table.tableData);
+      };
+      getPageList();
       // 解析图片
       function parseImage() {
         let imgSrc = [];

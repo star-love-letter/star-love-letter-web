@@ -18,7 +18,7 @@
             <el-avatar
               class="mr-4 w-10 h-10"
               v-if="tableDetail.isLogin"
-              :src="$imgUrl + tableDetail.loginInfo.avatar"
+              :src="comment.imgUrl + tableDetail.loginInfo.avatar"
             />
             <div v-else class="mr-4 w-10 h-10 bg-gray-300 rounded-full"></div>
           </div>
@@ -53,7 +53,7 @@
                 <el-upload
                   with-credentials
                   list-type="picture"
-                  :action="$imgUrl"
+                  :action="comment.imgUrl"
                   :on-success="handleSuccess"
                   :on-remove="handleRemove"
                   :on-error="handleError"
@@ -113,8 +113,8 @@ export default {
   },
   setup() {
     // 拿到当前实例 获取全局的imgUrl
-    const { proxy } = getCurrentInstance(); //关键代码
-    const $imgUrl = proxy.$imgUrl; //关键代码
+    // const { proxy } = getCurrentInstance(); //关键代码
+    // const $imgUrl = proxy.$imgUrl; //关键代码
     // 创建store实例
     const store = useStore();
     const route = useRoute();
@@ -127,6 +127,7 @@ export default {
     const comment = reactive({
       emojiVisible: false,
       commentData: [],
+      imgUrl: process.env.VUE_APP_BASEURL + '/api/file/image/',
       commentParam: {
         pageIndex: 1,
         pageSize: 10,
@@ -161,7 +162,6 @@ export default {
           message: res.message,
           type: "error",
         });
-        console.log(res);
         handleError(res, file, files);
         handleRemove(file, files);
       }
@@ -200,9 +200,7 @@ export default {
     // 发布评论
     function postComment() {
       comment.addCommentParam.images = JSON.stringify(imgs);
-      console.log("comment.addCommentParam", comment.addCommentParam);
       apiAddComment(Qs.stringify(comment.addCommentParam)).then((res) => {
-        console.log("res", res);
         if ((res.code = 200)) {
           router.go(0);
           ElNotification.success({
@@ -218,7 +216,6 @@ export default {
     watch(
       () => store.state.userInfo,
       (newVal) => {
-        console.log(store.state.userInfo);
         if (store.state.userInfo !== "") {
           tableDetail.isLogin = true;
           tableDetail.loginInfo = store.state.userInfo;
@@ -240,8 +237,8 @@ export default {
   },
 };
 </script>
-<style>
-.el-textarea__inner {
+<style scoped>
+:deep(.el-textarea__inner) {
   border-radius: 0.75rem;
 }
 </style>
