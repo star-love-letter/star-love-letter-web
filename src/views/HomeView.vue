@@ -20,21 +20,19 @@
   <div
     class="bg-dark-100 w-full p-5 text-center text-white text-sm flex flex-col"
   >
-    <a href="https://beian.miit.gov.cn" target="_blank" class="text-md">{{view.viewData.footer}}</a>
+    <a href="https://beian.miit.gov.cn" target="_blank" class="text-sm">
+    {{store.state.viewData.footer}}
+    </a>
   </div>
 </template>
 
 <script setup>
   import HomePhoto from '../components/ShowPhoto.vue';
-  import { reactive, onMounted } from 'vue';
+  import { onMounted } from 'vue';
   import { useStore } from 'vuex';
   const store = useStore();
-
-  const view = reactive({
-    viewData: {},
-  });
   onMounted(() => {
     store.dispatch('getView');
-    view.viewData = store.state.viewData;
+    console.log('store.state.viewData', store.state.viewData);
   });
 </script>
