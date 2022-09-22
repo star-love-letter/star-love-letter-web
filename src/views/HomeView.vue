@@ -20,7 +20,7 @@
   <div
     class="bg-dark-100 w-full p-5 text-center text-white text-sm flex flex-col"
   >
-    <a href="https://beian.miit.gov.cn" target="_blank">{{view.viewData.footer}}</a>
+    <a href="https://beian.miit.gov.cn" target="_blank" class="text-md">{{view.viewData.footer}}</a>
   </div>
 </template>
 
