@@ -6,6 +6,7 @@ import ReleaseView from '../views/Release.vue'
 import Help from '../views/Help.vue'
 import TableDetails from '../views/TableDetails.vue'
 import Register from '../views/Register.vue'
+import ForgetPwd from '../views/ForgetPwd.vue'
 import closedWebsite from '../views/closedWebsite.vue'
 
 
@@ -42,6 +43,11 @@ const routes = [{
         path: '/help',
         name: 'help',
         component: Help
+    },
+    {
+        path: '/forgetPwd',
+        name: 'forgetPwd',
+        component: ForgetPwd
     },
     ]
 },

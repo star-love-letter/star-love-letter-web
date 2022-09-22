@@ -91,8 +91,8 @@
                   <div class="text ml-5">
                     {{
                       this.$dayjs(login.loginInfo.createTime)
-                        .locale("zh-cn")
-                        .format("YYYY-MM-DD HH:mm:ss")
+                        .locale('zh-cn')
+                        .format('YYYY-MM-DD HH:mm:ss')
                     }}
                   </div>
                 </li>
@@ -101,8 +101,8 @@
                   <div class="text ml-5">
                     {{
                       this.$dayjs(login.loginInfo.lastTime)
-                        .locale("zh-cn")
-                        .format("YYYY-MM-DD HH:mm:ss")
+                        .locale('zh-cn')
+                        .format('YYYY-MM-DD HH:mm:ss')
                     }}
                   </div>
                 </li>
@@ -193,115 +193,119 @@
   ></loginDialog>
 </template>
 <script>
-// 引入ref
-import { ref, reactive, onMounted, watch } from "vue";
-import loginDialog from "../components/loginDialog.vue";
-import { apiUserInfo, apiLogout } from "@/apis/user.js";
-import { useStore } from "vuex";
-export default {
-  components: {
-    loginDialog,
-  },
-  setup() {
-    // 创建store实例
-    const store = useStore();
-    let innerWidth = ref(window.innerWidth);
-    // 响应式menuShow
-    let menuShow = ref(false);
-    const login = reactive({
-      showLoginView: false,
-      // 是否登录
-      isLogin: false,
-      imgUrl: process.env.VUE_APP_BASEURL + "/api/file/image/",
-      // 响应式登录表单
-      loginFrom: {
-        userStr: "",
-        password: "",
-      },
-      loginInfo: {},
-      // 是否显示用户信息
-      showUserInfo: false,
-    });
-    // 获取登录信息
-    function loginInfo(data) {
-      login.isLogin = true;
-      login.loginInfo = data;
-    }
-    // 退出登录
-    function logoutFn() {
-      apiLogout().then((res) => {
-        if (res.code === 200) {
-          login.isLogin = false;
-          login.loginInfo = {};
-          store.commit("changeLogin", false);
-          store.commit("getUserInfo", "");
-          localStorage.setItem("loginInfo", "");
-        }
+  // 引入ref
+  import { ref, reactive, onMounted, watch } from 'vue';
+  import loginDialog from '../components/loginDialog.vue';
+  import { apiUserInfo, apiLogout } from '@/apis/user.js';
+  import { useStore } from 'vuex';
+  export default {
+    components: {
+      loginDialog,
+    },
+    setup() {
+      // 创建store实例
+      const store = useStore();
+      let innerWidth = ref(window.innerWidth);
+      // 响应式menuShow
+      let menuShow = ref(false);
+      const login = reactive({
+        showLoginView: false,
+        // 是否登录
+        isLogin: false,
+        imgUrl: process.env.VUE_APP_BASEURL + '/api/file/image/',
+        // 响应式登录表单
+        loginFrom: {
+          userStr: '',
+          password: '',
+        },
+        loginInfo: {},
+        // 是否显示用户信息
+        showUserInfo: false,
       });
-    }
-    // 拿到子组件弹窗的值
-    function isSonShow(val) {
-      login.showLoginView = val;
-    }
-    // 监控store中的userInfo
-    watch(
-      () => store.state.userInfo,
-      (newVal) => {
-        if (newVal) {
-          loginInfo(newVal);
-        }
-      }
-    );
-    // 监控store中的userInfo
-    watch(
-      () => login.isLogin,
-      (newVal) => {
-        if (newVal) {
-          login.showLoginView = false;
-        }
-      }
-    );
-    onMounted(() => {
-      // 获取用户信息---判断是否登录
-      apiUserInfo().then((res) => {
-        if (res.code === 200) {
-          store.commit("changeLogin", true);
-          store.commit("getUserInfo", res.data);
-          loginInfo(res.data);
-        } else {
-          // 将localStorage的loginInfo设置为空
-          localStorage.setItem("loginInfo", "");
-          store.commit("changeLogin", false);
-        }
+      const view = reactive({
+        viewData: {}
       });
-    });
-    return {
-      innerWidth,
-      menuShow,
-      login,
-      logoutFn,
-      loginInfo,
-      isSonShow,
-    };
-  },
-};
+      // 获取登录信息
+      function loginInfo(data) {
+        login.isLogin = true;
+        login.loginInfo = data;
+      }
+      // 退出登录
+      function logoutFn() {
+        apiLogout().then(res => {
+          if (res.code === 200) {
+            login.isLogin = false;
+            login.loginInfo = {};
+            store.commit('changeLogin', false);
+            store.commit('getUserInfo', '');
+            localStorage.setItem('loginInfo', '');
+          }
+        });
+      }
+      // 拿到子组件弹窗的值
+      function isSonShow(val) {
+        login.showLoginView = val;
+      }
+      // 监控store中的userInfo
+      watch(
+        () => store.state.userInfo,
+        newVal => {
+          if (newVal) {
+            loginInfo(newVal);
+          }
+        }
+      );
+      // 监控store中的userInfo
+      watch(
+        () => login.isLogin,
+        newVal => {
+          if (newVal) {
+            login.showLoginView = false;
+          }
+        }
+      );
+      onMounted(() => {
+        // 获取用户信息---判断是否登录
+        apiUserInfo().then(res => {
+          if (res.code === 200) {
+            store.commit('changeLogin', true);
+            store.commit('getUserInfo', res.data);
+            loginInfo(res.data);
+          } else {
+            // 将localStorage的loginInfo设置为空
+            localStorage.setItem('loginInfo', '');
+            store.commit('changeLogin', false);
+          }
+        });
+      });
+      return {
+        innerWidth,
+        menuShow,
+        login,
+        logoutFn,
+        loginInfo,
+        isSonShow,
+        view
+      };
+    },
+  };
 </script>
 <style>
-.activeClass {
-  color: red;
-}
-.menu-enter-active {
-  animation: menuShow 0.5s linear;
-}
-.menu-leave-active {
-  animation: menuShow 0.5s linear reverse;
-}
-@keyframes menuShow {
-  from {
-    transform: translateY(-100%);
+  .activeClass {
+    color: red;
   }
-  to {
-    transform: translateY(0);
+  .menu-enter-active {
+    animation: menuShow 0.5s linear;
   }
-}
+  .menu-leave-active {
+    animation: menuShow 0.5s linear reverse;
+  }
+  @keyframes menuShow {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 </style>

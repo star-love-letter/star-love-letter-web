@@ -50,10 +50,10 @@ export function apiAddUser(apiAddUserParam) {
     })
 }
 // 通过邮箱验证码修改密码
-export function apiUpdatePasswordByEmailCode(updateParam){
+export function apiUpdatePasswordByEmailCode(updatePwdParam){
     return httpRequest({
         url: '/api/user/updatePasswordByEmailCode',
         method: 'PUT',
-        params: updateParam
+        params: updatePwdParam
     })
 }

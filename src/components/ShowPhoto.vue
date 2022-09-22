@@ -192,7 +192,6 @@
           table.tableData = hotListData[1];
           parseImage();
         }
-        console.log('table.tableData', table.tableData);
       };
       getPageList();
       // 解析图片

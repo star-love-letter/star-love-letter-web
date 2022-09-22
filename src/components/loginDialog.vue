@@ -29,7 +29,7 @@
           <i class="fa-solid fa-lock"></i>
         </template>
       </el-input>
-      <el-link type="primary" class="float-right" @click="isForgetPwd = true"
+      <el-link type="primary" class="float-right" @click="goForgetPwd()"
         >忘记密码?</el-link
       >
       <span class="float-left ml-2 text-red-500" v-if="errorLoginMsg !== ''">{{
@@ -112,6 +112,11 @@
         window.screen.width < 768 ? (isMD = true) : (isMD = false);
       }
       monitorWidth();
+      // 跳转忘记密码页
+      const goForgetPwd = () => {
+        showDialog.value = false;
+        router.push('/ForgetPwd')
+      };
       return {
         isMD,
         showDialog,
@@ -120,6 +125,7 @@
         loginFn,
         goRegistetr,
         errorLoginMsg,
+        goForgetPwd
       };
     },
   };

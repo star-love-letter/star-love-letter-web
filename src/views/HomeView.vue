@@ -18,40 +18,24 @@
     <HomePhoto></HomePhoto>
   </div>
   <div
-    class="bg-dark-100 h-15 w-full leading-15 text-center text-white text-sm"
+    class="bg-dark-100 w-full p-5 text-center text-white text-sm flex flex-col"
   >
     <a href="https://beian.miit.gov.cn" target="_blank"> 鲁ICP备19013208号</a>
+    {{view.viewData.footer}}
   </div>
 </template>
 
 <script setup>
-  // 引入组件
   import HomePhoto from '../components/ShowPhoto.vue';
-  // const PageListParam = {
-  //   pageIndex: 1,
-  //   pageSize: 10,
-  //   rankName: 'support_count',
-  // };
-  // // 获取页面数据
-  // const getPageList = async () => {
-  //   // 根据点赞数获取数据
-  //   await apiGetPageList(PageListParam).then(res => {
-  //     // 遍历数据 如果有图片就添加到数组
-  //     for (const item of res.data) {
-  //       if (item.images !== null && item.images !== undefined) {
-  //         store.state.hotListData.push(item);
-  //         if (store.state.hotListData.length === 2) {
-  //           return;
-  //         }
-  //       }
-  //     }
-  //     // 判断有图片的列表
-  //     // 如果有图片的数组列表小于2的话就将页数增加1并递归调用这个函数
-  //     if (store.state.hotListData.length < 2) {
-  //       PageListParam.pageIndex++;
-  //       getPageList();
-  //     }
-  //   });
-  // };
-  // getPageList();
+  import { reactive, onMounted } from 'vue';
+  import { useStore } from 'vuex';
+  const store = useStore();
+
+  const view = reactive({
+    viewData: {},
+  });
+  onMounted(() => {
+    store.dispatch('getView');
+    view.viewData = store.state.viewData;
+  });
 </script>
