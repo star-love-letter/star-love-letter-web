@@ -144,16 +144,16 @@ export default {
     onMounted(() => {
       if (localStorage.getItem("loginInfo") !== "") {
         tableDetail.isLogin = true;
-        console.log("已登录");
+        // console.log("已登录");
         tableDetail.loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
       } else {
-        console.log("未登录");
+        // console.log("未登录");
       }
     });
     // 上传成功的钩子
     const handleSuccess = (res, file, files) => {
       if (res.code === 200) {
-        console.log("上传成功");
+        // console.log("上传成功");
         imgs.push(res.data);
         return;
       } else {

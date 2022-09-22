@@ -1,4 +1,6 @@
 <template>
+  <div id="header">
+  </div>
   <div
     class="
       nav
@@ -194,10 +196,11 @@
 </template>
 <script>
   // 引入ref
-  import { ref, reactive, onMounted, watch } from 'vue';
+  import { ref, reactive, onMounted, watch, Fragment } from 'vue';
   import loginDialog from '../components/loginDialog.vue';
   import { apiUserInfo, apiLogout } from '@/apis/user.js';
   import { useStore } from 'vuex';
+  import { getView } from "../apis/view";
   export default {
     components: {
       loginDialog,
@@ -208,6 +211,7 @@
       let innerWidth = ref(window.innerWidth);
       // 响应式menuShow
       let menuShow = ref(false);
+      let header = ref(null);
       const login = reactive({
         showLoginView: false,
         // 是否登录
@@ -265,6 +269,23 @@
         }
       );
       onMounted(() => {
+        getView().then((res) => {
+        if (res.code === 200) {
+           //页头
+          document.getElementById("header").innerHTML=res.data.header;
+          
+          //统计代码
+          let node=document.createElement("script");
+          node.innerHTML=res.data.statsCode;
+          let head=document.getElementsByTagName("head").item(0);
+          head.appendChild(node);
+        } else {
+          document.getElementById("header").innerHTML = "页头加载失败";
+        }
+
+        window.tt=header;
+      });
+
         // 获取用户信息---判断是否登录
         apiUserInfo().then(res => {
           if (res.code === 200) {

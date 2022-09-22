@@ -18,21 +18,25 @@
     <HomePhoto></HomePhoto>
   </div>
   <div
+    id="footer"
     class="bg-dark-100 w-full p-5 text-center text-white text-sm flex flex-col"
   >
-    <a href="https://beian.miit.gov.cn" target="_blank" class="text-sm">
-    {{store.state.viewData.footer}}
-    </a>
+   
   </div>
 </template>
 
 <script setup>
-  import HomePhoto from '../components/ShowPhoto.vue';
-  import { onMounted } from 'vue';
-  import { useStore } from 'vuex';
-  const store = useStore();
-  onMounted(() => {
-    store.dispatch('getView');
-    console.log('store.state.viewData', store.state.viewData);
+import HomePhoto from "../components/ShowPhoto.vue";
+import { ref, onMounted } from "vue";
+import { getView } from "../apis/view";
+let footer = ref(null);
+onMounted(() => {
+  getView().then((res) => {
+    if (res.code === 200) {
+      document.getElementById("footer").innerHTML = res.data.footer;
+    } else {
+      document.getElementById("footer").innerHTML = "页尾加载失败";
+    }
   });
+});
 </script>
